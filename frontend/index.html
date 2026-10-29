@@ -2,10 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Web Server Test</title>
+    <script src="./script.js" defer></script>
 </head>
 <body>
-    HUJ
+    <h1>Web Server Test</h1>
+
+    <p>Current time: <span id="clock"></span></p>
+    <p>Page URL: <span id="url"></span></p>
+
+    <p id="jsResult">Not tested yet</p>
+    <p id="serverResult">Not tested yet</p>
+
+    <button onclick="testJavaScript()">Test JavaScript</button>
+    <button onclick="checkServer()">Test Server Response</button>
 </body>
 </html>

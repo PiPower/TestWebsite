@@ -11,7 +11,6 @@ void FirstController::asyncHandleHttpRequest(
     }
 
     const std::string &rootPath = app().getDocumentRoot();
-    std::cout << "Received request for path: " << rootPath + *path << std::endl;
     if (!std::filesystem::is_regular_file(rootPath + *path)) {
         callback(HttpResponse::newNotFoundResponse(req));
         return;
