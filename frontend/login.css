@@ -16,6 +16,13 @@ body
     box-sizing: border-box;
 }
 
+.or-div
+{
+    text-align: left;
+    margin: 7px 7px;
+    color: gray;
+    font-size: 1.3rem;
+}
 /* Login form */
 #loginForm 
 {
