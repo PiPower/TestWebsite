@@ -1,0 +1,98 @@
+
+body 
+{
+    background-color: black;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.login-container 
+{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Login form */
+#loginForm 
+{
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Input fields */
+.input-field 
+{
+    width: 100%;
+    padding: 14px 16px;
+    box-sizing: border-box;
+
+    background-color: #151F18;
+    color: #EAF2EB;
+
+    border: 1px solid #344337;
+    border-radius: 12px;
+
+    font-size: 15px;
+    font-family: inherit;
+
+    outline: none;
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.input-field:focus 
+{
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+/* Input labels */
+.input-label
+{
+    color: #EAF2EB;
+    font-size: 110%;
+    font-family: inherit;
+}
+
+/* Password container */
+.password-container
+{
+    width: 100%;
+}
+
+/* Forgot password link */
+.forgot-password-container 
+{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+#forgotPasswordLink 
+{
+    text-decoration: none;
+    font-size: 0.85rem;
+    color: #3498db;
+}
+
+#forgotPasswordLink:hover 
+{
+    text-decoration: underline;
+}
+
+/* Sign in button */
+#signInButton 
+{
+    margin-top: 1vw;
+}
+
+input::-ms-reveal 
+{
+    filter: invert(1);
+}
+

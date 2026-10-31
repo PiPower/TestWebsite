@@ -2,19 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Web Server Test</title>
-    <script src="./script.js" defer></script>
+    <title>Lizard</title>
+    <script src="login.js"> </script>
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <h1>Web Server Test</h1>
+    <img src="imgs/title.png" alt="Lizard"  width="100" height="100"> 
+    <div class="login-container">
+        <form id="loginForm" action="/main.html" method="get">
+            <p class = "input-label"> Username or Email </p>
+            <input
+                class = "input-field"
+                type="text"
+                id="username"
+                name="login"
+                placeholder="Username or Email"
+                required
+            >
+            <p class = "input-label"> Password </p>
 
-    <p>Current time: <span id="clock"></span></p>
-    <p>Page URL: <span id="url"></span></p>
+            <div class="password-container">
+                <input
+                    class = "input-field"
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                    required
+                >
+                <div class="forgot-password-container">
+                    <a href="#" id="forgotPasswordLink">
+                        Forgot password?
+                    </a>
+                </div>
+            </div>
 
-    <p id="jsResult">Not tested yet</p>
-    <p id="serverResult">Not tested yet</p>
-
-    <button onclick="testJavaScript()">Test JavaScript</button>
-    <button onclick="checkServer()">Test Server Response</button>
+            <button type="submit" class="input-field" id="signInButton">Sign In</button>
+            or
+            <button class="input-field">Create Account</button>
+            New to Lizard? Join the conversation.
+        </form>
+    </div>
 </body>
 </html>
