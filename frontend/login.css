@@ -33,14 +33,13 @@ body
     color: gray;
     font-size: 1.3rem;
 }
-/* Login form */
+
 #loginForm 
 {
     width: 100%;
     max-width: 400px;
 }
 
-/* Input fields */
 .input-field 
 {
     width: 100%;
@@ -67,7 +66,6 @@ body
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
-/* Input labels */
 .input-label
 {
     color: #EAF2EB;
@@ -75,13 +73,11 @@ body
     font-family: inherit;
 }
 
-/* Password container */
 .password-container
 {
     width: 100%;
 }
 
-/* Forgot password link */
 .forgot-password-container 
 {
     width: 100%;
@@ -102,7 +98,6 @@ body
     text-decoration: underline;
 }
 
-/* Sign in button */
 #signInButton 
 {
     margin-top: 1vw;
