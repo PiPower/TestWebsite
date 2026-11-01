@@ -16,6 +16,16 @@ body
     box-sizing: border-box;
 }
 
+.logo
+{
+    position: absolute;
+    left: max(20px, calc((100vw - 900px) / 2));
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15vw;
+    height: 15vw;
+}
+
 .or-div
 {
     text-align: left;
