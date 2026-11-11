@@ -12,3 +12,4 @@ set(SERVER_SRC
 
 add_executable(wce_server ${SERVER_SRC})
 target_link_libraries(wce_server PRIVATE Drogon::Drogon)
+target_link_libraries(wce_server PRIVATE crypt)

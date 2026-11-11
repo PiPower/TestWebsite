@@ -4,6 +4,15 @@
 int main()
 {
     drogon::HttpAppFramework& app = drogon::app();
+    drogon::orm::PostgresConfig pgConfig = {};
+    pgConfig.port = 5432;
+    pgConfig.host = "localhost";
+    pgConfig.databaseName = "testdb";
+    pgConfig.username = "postgres";
+    pgConfig.password = "secret"; 
+    pgConfig.connectionNumber = 3; // Number of connections in the pool
+    pgConfig.name = "default";
+    app.addDbClient(pgConfig);
 
     app.registerPreRoutingAdvice(
         [](const drogon::HttpRequestPtr& req) {
@@ -20,14 +29,11 @@ int main()
             LOG_DEBUG << log;
         });
 
+    app.enableReusePort();
+    
     app.setDocumentRoot("./frontend")
         .setLogPath("", "")
         .setLogLevel(trantor::Logger::kDebug)
-        .setBeforeListenSockOptCallback([](int fd) {
-            int enable = 1;
-            setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
-                       &enable, sizeof(enable));
-            })
         .addListener("127.0.0.1", 6543)
         .setThreadNum(3)
         .run();

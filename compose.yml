@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:18.6
+    container_name: test_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+    volumes:
+       - db-data:/var/lib/postgresql
+
+volumes:
+  db-data:
+    driver: local
+
+configs:
+  httpd-config:
+    external: true
+
+secrets:
+  server-certificate:
+    external: true
+
+networks:
+  # The presence of these objects is sufficient to define them
+  front-tier: {}
+  back-tier: {}

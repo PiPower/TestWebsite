@@ -16,9 +16,14 @@ async function handleSignIn(event)
     try 
     {
         const response = await fetch(url + "?" + params.toString() );
+        const body = await response.text();
 
-        if (!response.ok) 
+        if (response.status === 404 && body == "login") 
         {
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("username").placeholder  = "Username or email not found";
+            document.getElementById("username").style.borderColor = "red";
             throw new Error(`Response status: ${response.status}`);
         }
 
