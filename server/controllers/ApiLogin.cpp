@@ -20,19 +20,20 @@ void ApiLogin::asyncHandleHttpRequest(
     auto clientPtr = drogon::app().getDbClient();
 
     const std::string* path = &req->getPath();
+    const Json::Value& json = *req->getJsonObject();
     const SafeStringMap<std::string>& params = req->getParameters();
-    if(params.empty() || 
-        params.find("username") == params.end() || 
-        params.find("password") == params.end())
+
+
+    std::string username = json["username"].asString();
+    std::string password = json["password"].asString();
+
+    if(username.size() == 0 || password.size() == 0)
     {
         auto resp = HttpResponse::newHttpResponse();
         resp->setStatusCode(k400BadRequest);
         callback(resp);
         return;
     }
-
-    const std::string& username = params.at("username");
-    const std::string& password = params.at("password");    
 
     bool isUsernameEmail = isEmail(username);
     drogon::orm::Result queryResult = isUsernameEmail ?

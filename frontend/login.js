@@ -10,12 +10,19 @@ async function handleSignIn(event)
     url = window.location.origin + "/api/login";
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-    const params = new URLSearchParams({
-        username: username,
-        password: password });
+
     try 
     {
-        const response = await fetch(url + "?" + params.toString() );
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password
+        })
+        });
         const body = await response.text();
 
         if (response.status === 404 && body == "login") 

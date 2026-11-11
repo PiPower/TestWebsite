@@ -11,6 +11,6 @@ public:
 
     PATH_LIST_BEGIN
     //list path definitions here;
-    PATH_ADD("/api/login", Get);
+    PATH_ADD("/api/login", Post);
     PATH_LIST_END
 };
