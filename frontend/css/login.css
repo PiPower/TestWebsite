@@ -108,3 +108,16 @@ input::-ms-reveal
     filter: invert(1);
 }
 
+#create-account
+{
+   display: none;
+}
+
+.raw-field-margin
+{
+    margin-top: 10%;
+    width: 200%;
+    position: relative;
+    left: -50%;
+    justify-content: center;
+}

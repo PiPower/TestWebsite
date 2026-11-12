@@ -1,9 +1,10 @@
 const signInButton = document.getElementById("signInButton");
+const registerButton = document.getElementById("registerButton");
 const createAccountButton = document.getElementById("createAccountButton");
 
 signInButton.addEventListener("click", handleSignIn);
-
-createAccountButton.addEventListener("click", handleRegister);
+registerButton.addEventListener("click", handleRegister);
+createAccountButton.addEventListener("click", handleCreateAccount);
 
 async function handleSignIn(event) 
 {
@@ -47,5 +48,11 @@ async function handleSignIn(event)
 
 async function handleRegister(event) 
 {
-    alert("Register button clicked");
+    document.getElementById("login_view").style.display = "none";
+    document.getElementById("create-account").style.display = "block";
+}
+
+async function handleCreateAccount(event)   
+{
+    alert("Create Account button clicked");
 }
