@@ -4,10 +4,13 @@ project(web_server)
 
 add_subdirectory("third_party/drogon")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(SERVER_SRC 
     server/main.cpp
     server/controllers/FirstController.cpp
     server/controllers/ApiLogin.cpp
+    server/controllers/ApiCreateAccount.cpp
 )   
 
 add_executable(wce_server ${SERVER_SRC})

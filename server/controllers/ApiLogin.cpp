@@ -1,5 +1,4 @@
 #include "ApiLogin.hpp"
-#include <crypt.h>
 
 inline bool isEmail(const std::string& str)
 {
@@ -18,7 +17,7 @@ void ApiLogin::asyncHandleHttpRequest(
      std::function<void(const HttpResponsePtr &)> &&callback)
 {
     auto clientPtr = drogon::app().getDbClient();
-
+    
     const std::string* path = &req->getPath();
     const Json::Value& json = *req->getJsonObject();
     const SafeStringMap<std::string>& params = req->getParameters();

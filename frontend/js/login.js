@@ -54,5 +54,34 @@ async function handleRegister(event)
 
 async function handleCreateAccount(event)   
 {
-    alert("Create Account button clicked");
+    url = window.location.origin + "/api/create_account";
+    const create_username = document.getElementById("create-username").value;
+    const create_email = document.getElementById("create-email").value;
+    const create_password = document.getElementById("create-password").value;
+    const repeat_password = document.getElementById("repeat-password").value;
+
+    try 
+    {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                create_username,
+                create_email,
+                create_password,
+                repeat_password
+            })
+        });
+        const body = await response.text();
+        if(response.status == 400)
+        {
+            alert(body);
+        }
+    }
+    catch (error) 
+    {
+        console.error(error.message);
+    }
 }
