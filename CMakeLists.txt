@@ -8,10 +8,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(SERVER_SRC 
     server/main.cpp
-    server/controllers/FirstController.cpp
-    server/controllers/ApiLogin.cpp
-    server/controllers/ApiCreateAccount.cpp
-    server/states/UserState.cpp
+    server/EndPoints.cpp
+    server/UserState.cpp
 )   
 
 add_executable(wce_server ${SERVER_SRC})

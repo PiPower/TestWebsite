@@ -1,12 +1,24 @@
-#include "ApiCreateAccount.hpp"
+#include "EndPoints.hpp"
 #include "drogon/HttpTypes.h"
 #include "drogon/orm/Result.h"
 #include <random>
 #include <crypt.h>
 #include <trantor/utils/Logger.h>
 #include <drogon/orm/Exception.h>
-#include "../states/UserState.hpp"
+#include "UserState.hpp"
 using namespace std;
+
+static inline bool isEmail(const std::string& str)
+{
+    for(size_t i = 0; i < str.size(); ++i)
+    {
+        if(str[i] == '@')
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 constexpr std::array<char, 64> yescrypt_chars = {
     '.', '/',
@@ -53,7 +65,7 @@ static bool validateCredentials(
     return true;
 }
 
-void ApiCreateAccount::createAccount(
+void EndPoints::createAccount(
     const drogon::HttpRequestPtr &req, 
     function<void(const drogon::HttpResponsePtr &)> &&callback)
 {
@@ -124,4 +136,71 @@ void ApiCreateAccount::createAccount(
     resp->setStatusCode(drogon::k200OK);
     callback(resp);
 
+}
+
+void EndPoints::login(
+    const drogon::HttpRequestPtr &req, 
+    function<void(const drogon::HttpResponsePtr &)> &&callback)
+{
+    auto clientPtr = drogon::app().getDbClient();
+    
+    const std::string* path = &req->getPath();
+    const Json::Value& json = *req->getJsonObject();
+    const SafeStringMap<std::string>& params = req->getParameters();
+
+
+    std::string username = json["username"].asString();
+    std::string password = json["password"].asString();
+
+    if(username.size() == 0 || password.size() == 0)
+    {
+        auto resp = HttpResponse::newHttpResponse();
+        resp->setStatusCode(k400BadRequest);
+        callback(resp);
+        return;
+    }
+
+    bool isUsernameEmail = isEmail(username);
+    drogon::orm::Result queryResult = isUsernameEmail ?
+        clientPtr->execSqlSync(
+            "SELECT salt, password_hash FROM users WHERE email = $1",
+            username) 
+        : 
+        clientPtr->execSqlSync(
+            "SELECT salt, password_hash FROM users WHERE username = $1",
+            username);
+
+    if(queryResult.size() == 0)
+    {
+        auto resp = HttpResponse::newHttpResponse();
+        resp->setStatusCode(k404NotFound);
+        resp->setBody("login");
+        callback(resp);
+        return;
+    }
+
+    auto resp = HttpResponse::newHttpResponse();
+    resp->setStatusCode(k200OK);
+    callback(resp);
+}
+
+void EndPoints::index(
+    const drogon::HttpRequestPtr &req, 
+    function<void(const drogon::HttpResponsePtr &)> &&callback)
+{
+    const std::string* path = &req->getPath();
+    if(path->empty() || *path == "/") {
+        static const std::string indexPath = "/index.html";
+        path = &indexPath;
+    }
+
+    const std::string &rootPath = app().getDocumentRoot();
+    if (!std::filesystem::is_regular_file(rootPath + *path)) {
+        callback(HttpResponse::newNotFoundResponse(req));
+        return;
+    }
+
+    auto resp = HttpResponse::newFileResponse(rootPath + *path);
+    resp->setStatusCode(k200OK);
+    callback(resp);
 }
