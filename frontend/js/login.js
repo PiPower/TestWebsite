@@ -1,10 +1,12 @@
 const signInButton = document.getElementById("signInButton");
 const registerButton = document.getElementById("registerButton");
 const createAccountButton = document.getElementById("createAccountButton");
+const loginDuringCreate = document.getElementById("loginDuringCreate");
 
 signInButton.addEventListener("click", handleSignIn);
 registerButton.addEventListener("click", handleRegister);
 createAccountButton.addEventListener("click", handleCreateAccount);
+loginDuringCreate.addEventListener("click", loginButtonDuringAccountCreate);
 
 async function handleSignIn(event) 
 {
@@ -25,8 +27,11 @@ async function handleSignIn(event)
         })
         });
         const body = await response.text();
-
-        if (response.status === 404 && body == "login") 
+        if(response.status == 302)
+        {
+            window.location.href = "/home";
+        }
+        else if (response.status === 404 && body == "login") 
         {
             document.getElementById("username").value = "";
             document.getElementById("password").value = "";
@@ -34,9 +39,6 @@ async function handleSignIn(event)
             document.getElementById("username").style.borderColor = "red";
             throw new Error(`Response status: ${response.status}`);
         }
-
-        const result = await response.json();
-        console.log(result);
     } 
     catch (error) 
     {
@@ -89,4 +91,10 @@ async function handleCreateAccount(event)
     {
         console.error(error.message);
     }
+}
+
+async function loginButtonDuringAccountCreate(event)  
+{
+    document.getElementById("login_view").style.display = "block";
+    document.getElementById("create-account").style.display = "none";
 }

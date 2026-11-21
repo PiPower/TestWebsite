@@ -128,11 +128,11 @@ void EndPoints::login(
     bool isUsernameEmail = isEmail(username);
     drogon::orm::Result queryResult = isUsernameEmail ?
         clientPtr->execSqlSync(
-            "SELECT salt, password_hash FROM users WHERE email = $1;",
+            "SELECT id, salt, password_hash FROM users WHERE email = $1;",
             username) 
         : 
         clientPtr->execSqlSync(
-            "SELECT salt, password_hash FROM users WHERE username = $1;",
+            "SELECT id, salt, password_hash FROM users WHERE username = $1;",
             username);
 
     if(queryResult.size() == 0)
@@ -144,8 +144,11 @@ void EndPoints::login(
         return;
     }
 
+    uint64_t userId = queryResult[0]["id"].as<uint64_t>();
+    req->session()->insert(USER_KEY, createUserState(userId));
+    
     auto resp = HttpResponse::newHttpResponse();
-    resp->setStatusCode(k200OK);
+    resp->setStatusCode(drogon::k302Found);
     callback(resp);
 }
 
