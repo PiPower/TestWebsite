@@ -1,9 +1,11 @@
 #include "ApiCreateAccount.hpp"
+#include "drogon/HttpTypes.h"
 #include "drogon/orm/Result.h"
 #include <random>
 #include <crypt.h>
 #include <trantor/utils/Logger.h>
 #include <drogon/orm/Exception.h>
+#include "../states/UserState.hpp"
 using namespace std;
 
 constexpr std::array<char, 64> yescrypt_chars = {
@@ -117,8 +119,9 @@ void ApiCreateAccount::createAccount(
         
     }
     
-
-    resp->setStatusCode(k400BadRequest);
+    req->session()->insert("user_state", createUserState(std::move(username)) );
+    resp = HttpResponse::newFileResponse( app().getDocumentRoot() + "/main.html");
+    resp->setStatusCode(drogon::k200OK);
     callback(resp);
 
 }

@@ -13,7 +13,7 @@ int main()
     pgConfig.connectionNumber = 3; // Number of connections in the pool
     pgConfig.name = "default";
     app.addDbClient(pgConfig);
-
+    app.enableSession(20);
     app.registerPreRoutingAdvice(
         [](const drogon::HttpRequestPtr& req) {
             std::string log = req->methodString() + std::string(" ") +

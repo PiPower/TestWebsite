@@ -75,10 +75,15 @@ async function handleCreateAccount(event)
             })
         });
         const body = await response.text();
-        if(response.status == 400)
+        if(response.status == 200)
+        {
+            document.documentElement.innerHTML = body
+        }
+        else if(response.status == 400)
         {
             alert(body);
         }
+        
     }
     catch (error) 
     {

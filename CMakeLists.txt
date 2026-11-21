@@ -11,6 +11,7 @@ set(SERVER_SRC
     server/controllers/FirstController.cpp
     server/controllers/ApiLogin.cpp
     server/controllers/ApiCreateAccount.cpp
+    server/states/UserState.cpp
 )   
 
 add_executable(wce_server ${SERVER_SRC})
