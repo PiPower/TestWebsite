@@ -1,9 +1,8 @@
-#include <string>
 #include <memory>
 
 struct UserState
 {
-    std::string username;
+    uint64_t userId;
 };
 
-std::shared_ptr<UserState> createUserState(std::string username);
+std::shared_ptr<UserState> createUserState(uint64_t userId);

@@ -1,6 +1,8 @@
 #include "EndPoints.hpp"
+#include "drogon/HttpResponse.h"
 #include "drogon/HttpTypes.h"
 #include "drogon/orm/Result.h"
+#include <memory>
 #include <random>
 #include <crypt.h>
 #include <trantor/utils/Logger.h>
@@ -8,19 +10,9 @@
 #include "UserState.hpp"
 #include "Utils.hpp"
 
-using namespace std;
+constexpr const char* USER_KEY = "user_state";
 
-static inline bool isEmail(const std::string& str)
-{
-    for(size_t i = 0; i < str.size(); ++i)
-    {
-        if(str[i] == '@')
-        {
-            return true;
-        }
-    }
-    return false;
-}
+using namespace std;
 
 constexpr std::array<char, 64> yescrypt_chars = {
     '.', '/',
@@ -37,8 +29,8 @@ const std::string saltPrefix = "$y$j9T$";
 
 
 void EndPoints::createAccount(
-    const drogon::HttpRequestPtr &req, 
-    function<void(const drogon::HttpResponsePtr &)> &&callback)
+     const drogon::HttpRequestPtr &req, 
+     function<void(const drogon::HttpResponsePtr &)> &&callback)
 {
     const Json::Value& json = *req->getJsonObject();
     auto resp = HttpResponse::newHttpResponse();
@@ -76,13 +68,16 @@ void EndPoints::createAccount(
     }
 
     auto clientPtr = drogon::app().getDbClient();
+    uint64_t userId = -1;
     try
     {
         orm::Result queryRes = clientPtr->execSqlSync(
             "INSERT INTO users (username, salt, password_hash, email) "
-            "VALUES ($1, $2, $3, $4)",
+            "VALUES ($1, $2, $3, $4)"
+            "RETURNING id;",
             username, salt.c_str() + saltPrefix.size(), hash + saltPrefix.size(), email);
 
+        userId = queryRes[0]["id"].as<uint64_t>();
     }
     catch (const orm::DrogonDbException &e)
     {
@@ -102,16 +97,15 @@ void EndPoints::createAccount(
         
     }
     
-    req->session()->insert("user_state", createUserState(std::move(username)) );
-    resp = HttpResponse::newFileResponse( app().getDocumentRoot() + "/main.html");
-    resp->setStatusCode(drogon::k200OK);
+    req->session()->insert(USER_KEY, createUserState(userId));
+    resp->setStatusCode(drogon::k302Found);
     callback(resp);
 
 }
 
 void EndPoints::login(
-    const drogon::HttpRequestPtr &req, 
-    function<void(const drogon::HttpResponsePtr &)> &&callback)
+     const drogon::HttpRequestPtr &req, 
+     function<void(const drogon::HttpResponsePtr &)> &&callback)
 {
     auto clientPtr = drogon::app().getDbClient();
     
@@ -134,11 +128,11 @@ void EndPoints::login(
     bool isUsernameEmail = isEmail(username);
     drogon::orm::Result queryResult = isUsernameEmail ?
         clientPtr->execSqlSync(
-            "SELECT salt, password_hash FROM users WHERE email = $1",
+            "SELECT salt, password_hash FROM users WHERE email = $1;",
             username) 
         : 
         clientPtr->execSqlSync(
-            "SELECT salt, password_hash FROM users WHERE username = $1",
+            "SELECT salt, password_hash FROM users WHERE username = $1;",
             username);
 
     if(queryResult.size() == 0)
@@ -156,8 +150,8 @@ void EndPoints::login(
 }
 
 void EndPoints::index(
-    const drogon::HttpRequestPtr &req, 
-    function<void(const drogon::HttpResponsePtr &)> &&callback)
+     const drogon::HttpRequestPtr &req, 
+     function<void(const drogon::HttpResponsePtr &)> &&callback)
 {
     const std::string* path = &req->getPath();
     if(path->empty() || *path == "/") {
@@ -173,5 +167,30 @@ void EndPoints::index(
 
     auto resp = HttpResponse::newFileResponse(rootPath + *path);
     resp->setStatusCode(k200OK);
+    callback(resp);
+}
+
+void EndPoints::home(
+     const drogon::HttpRequestPtr &req,
+     std::function<void(const drogon::HttpResponsePtr &)> &&callback)
+{
+    if(!req->session()->find(USER_KEY))
+    {
+        HttpResponsePtr resp = HttpResponse::newHttpResponse();
+        resp->setStatusCode(k400BadRequest);
+        callback(resp);
+        return;
+    }
+
+    shared_ptr<UserState> user = req->session()->get<shared_ptr<UserState>>(USER_KEY);
+    auto clientPtr = drogon::app().getDbClient();
+    drogon::orm::Result queryResult = clientPtr->execSqlSync(
+                "SELECT * FROM users WHERE users.id = $1;",
+                to_string(user->userId));
+
+    const char* field = queryResult.at(0).at("username").c_str();
+    HttpResponsePtr resp = HttpResponse::newHttpResponse();
+    resp->setStatusCode(drogon::k200OK);
+    resp->setBody(field);
     callback(resp);
 }

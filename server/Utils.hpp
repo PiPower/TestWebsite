@@ -8,3 +8,15 @@ bool validateCredentials(
     const std::string& password_repeat);
 
 bool isValidEmail(const std::string& email);
+
+inline bool isEmail(const std::string& str)
+{
+    for(size_t i = 0; i < str.size(); ++i)
+    {
+        if(str[i] == '@')
+        {
+            return true;
+        }
+    }
+    return false;
+}

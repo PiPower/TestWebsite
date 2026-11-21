@@ -75,9 +75,9 @@ async function handleCreateAccount(event)
             })
         });
         const body = await response.text();
-        if(response.status == 200)
+        if(response.status == 302)
         {
-            document.documentElement.innerHTML = body
+            window.location.href = "/home";
         }
         else if(response.status == 400)
         {
