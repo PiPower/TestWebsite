@@ -6,6 +6,8 @@
 #include <trantor/utils/Logger.h>
 #include <drogon/orm/Exception.h>
 #include "UserState.hpp"
+#include "Utils.hpp"
+
 using namespace std;
 
 static inline bool isEmail(const std::string& str)
@@ -33,37 +35,6 @@ constexpr std::array<char, 64> yescrypt_chars = {
 
 const std::string saltPrefix = "$y$j9T$";
 
-static bool validateCredentials(
-    const std::string& username, 
-    const std::string& email, 
-    const std::string& password, 
-    const std::string& password_repeat)
-{
-    if (username.empty() || 
-        email.empty()    || 
-        password.empty() || 
-        password_repeat.empty())
-    {
-        return false;
-    }
-
-    if (username.size() > 50  || 
-        email.size() > 100    || 
-        password.size() > 100 || 
-        password_repeat.size() > 100)
-    {
-        return false;
-    }
-
-    if (password != password_repeat)
-    {
-        return false;
-    }
-
-  
-    // Additional validation logic can be added here (e.g., regex for email format, password strength, etc.)
-    return true;
-}
 
 void EndPoints::createAccount(
     const drogon::HttpRequestPtr &req, 
