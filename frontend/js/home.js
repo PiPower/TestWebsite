@@ -8,8 +8,7 @@ const profileButton = document.querySelector("#button-profile button");
 const postButton = document.querySelector("#button-post button");
 const forYouButton = document.querySelector("#button-for-you button");
 const followingButton = document.querySelector("#button-following button");
-
-
+const sidebarProfile = document.querySelector(".sidebar-profile");
 
 homeButton.addEventListener("click", homeHandler);
 exploreButton.addEventListener("click", exploreHandler);
@@ -20,40 +19,54 @@ profileButton.addEventListener("click", profileHandler);
 postButton.addEventListener("click", postHandler);
 forYouButton.addEventListener("click", forYouHandler);
 followingButton.addEventListener("click", followingHandler);
+sidebarProfile.addEventListener("click", sidebarProfileHandler)
 
-
-async function homeHandler() {
+async function homeHandler() 
+{
     alert("homeHandler");
 }
 
-async function exploreHandler() {
+async function exploreHandler() 
+{
     alert("exploreHandler");
 }
 
-async function notificationsHandler() {
+async function notificationsHandler() 
+{
     alert("notificationsHandler");
 }
 
-async function messagesHandler() {
+async function messagesHandler() 
+{
     alert("messagesHandler");
 }
 
-async function bookmarksHandler() {
+async function bookmarksHandler() 
+{
     alert("bookmarksHandler");
 }
 
-async function profileHandler() {
+async function profileHandler() 
+{
     alert("profileHandler");
 }
 
-async function postHandler() {
+async function postHandler() 
+{
     alert("postHandler");
 }
 
-async function forYouHandler() {
+async function forYouHandler() 
+{
     alert("forYouHandler");
 }
 
-async function followingHandler() {
+async function followingHandler()
+{
     alert("followingHandler");
+}
+
+async function sidebarProfileHandler()
+{
+    alert("sidebarProfileHandler");
 }
