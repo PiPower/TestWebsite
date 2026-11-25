@@ -58,12 +58,20 @@ async function postHandler()
 
 async function forYouHandler() 
 {
-    alert("forYouHandler");
+    const buttonFy = document.querySelector('#button-for-you button');
+    buttonFy.style.setProperty('--visibility', 'visible');
+
+    const buttonFol = document.querySelector('#button-following button');
+    buttonFol.style.setProperty('--visibility', 'hidden');
 }
 
 async function followingHandler()
 {
-    alert("followingHandler");
+    const buttonFy = document.querySelector('#button-for-you button');
+    buttonFy.style.setProperty('--visibility', 'hidden');
+
+    const buttonFol = document.querySelector('#button-following button');
+    buttonFol.style.setProperty('--visibility', 'visible');
 }
 
 async function sidebarProfileHandler()

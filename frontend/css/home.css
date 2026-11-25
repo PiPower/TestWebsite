@@ -258,6 +258,37 @@ body
     font-weight: bold;
 }
 
+#button-for-you button::after
+{
+    content: "";
+    visibility: var(--visibility, hidden);;
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+
+    width: 50%;
+    height: 4px;
+
+    background-color: #2E8B57;
+    border-radius: 10px;
+}
+
+#button-following button::after
+{
+    content: "";
+    visibility: var(--visibility, hidden);;
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+
+    width: 50%;
+    height: 4px;
+
+    background-color: #2E8B57;
+    border-radius: 10px;
+}
+
+
 /* MOBILE */
 
 @media (max-width: 650px)

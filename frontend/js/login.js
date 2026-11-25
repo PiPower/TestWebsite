@@ -26,20 +26,24 @@ async function handleSignIn(event)
                 password
         })
         });
-        const body = await response.text();
-        if(response.status == 302)
+        var body = await response.text();
+        if(response.status == 302 || response.status == 301 || response.status == 200)
         {
-            const response = await fetch(window.location.origin + "/home");
-            if (!response.ok) {
-                throw new Error(`HTTP error: ${response.status}`);
+            if(response.status != 200)
+            {
+                const response = await fetch(window.location.origin + "/home");
+                if (!response.ok)
+                {
+                    throw new Error(`HTTP error: ${response.status}`);
+                }
+                body = await response.text();
             }
 
             // Wait until the entire HTML is downloaded
-            const html = await response.text();
             document.open();
-            document.write(html);
+            document.write(body);
             document.close();
-            window.history.pushState({}, '', response.url);
+            window.history.pushState({}, '', window.location.origin + "/home");
         }
         else if (response.status === 404 && body == "login") 
         {

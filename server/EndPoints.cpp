@@ -106,6 +106,12 @@ void EndPoints::login(
      const drogon::HttpRequestPtr &req, 
      function<void(const drogon::HttpResponsePtr &)> &&callback)
 {
+
+    if(redirectHomeOnExistingSession(req, callback))
+    {
+        return;
+    }
+
     auto clientPtr = drogon::app().getDbClient();
     
     const std::string* path = &req->getPath();
