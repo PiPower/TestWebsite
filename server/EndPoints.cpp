@@ -10,7 +10,6 @@
 #include "UserState.hpp"
 #include "Utils.hpp"
 
-constexpr const char* USER_KEY = "user_state";
 
 using namespace std;
 
@@ -156,6 +155,11 @@ void EndPoints::index(
      const drogon::HttpRequestPtr &req, 
      function<void(const drogon::HttpResponsePtr &)> &&callback)
 {
+    if(redirectHomeOnExistingSession(req, callback))
+    {
+        return;
+    }
+
     const std::string* path = &req->getPath();
     if(path->empty() || *path == "/") {
         static const std::string indexPath = "/index.html";
@@ -180,7 +184,8 @@ void EndPoints::home(
     if(!req->session()->find(USER_KEY))
     {
         HttpResponsePtr resp = HttpResponse::newHttpResponse();
-        resp->setStatusCode(k400BadRequest);
+        resp->setStatusCode(drogon::k301MovedPermanently);
+        resp->addHeader("Location", "/");
         callback(resp);
         return;
     }
@@ -191,9 +196,10 @@ void EndPoints::home(
                 "SELECT * FROM users WHERE users.id = $1;",
                 to_string(user->userId));
 
+
+    const std::string &rootPath = app().getDocumentRoot();
     const char* field = queryResult.at(0).at("username").c_str();
-    HttpResponsePtr resp = HttpResponse::newHttpResponse();
+    HttpResponsePtr resp =  HttpResponse::newFileResponse(rootPath + "/home.html");
     resp->setStatusCode(drogon::k200OK);
-    resp->setBody(field);
     callback(resp);
 }

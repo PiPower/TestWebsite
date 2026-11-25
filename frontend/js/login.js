@@ -29,7 +29,17 @@ async function handleSignIn(event)
         const body = await response.text();
         if(response.status == 302)
         {
-            window.location.href = "/home";
+            const response = await fetch(window.location.origin + "/home");
+            if (!response.ok) {
+                throw new Error(`HTTP error: ${response.status}`);
+            }
+
+            // Wait until the entire HTML is downloaded
+            const html = await response.text();
+            document.open();
+            document.write(html);
+            document.close();
+            window.history.pushState({}, '', response.url);
         }
         else if (response.status === 404 && body == "login") 
         {

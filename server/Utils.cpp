@@ -1,5 +1,8 @@
 #include "Utils.hpp"
 #include <cctype>
+#include "drogon/HttpResponse.h"
+#include "drogon/HttpTypes.h"
+using namespace drogon;
 
 bool validateCredentials(
     const std::string& username, 
@@ -78,5 +81,21 @@ bool isValidEmail(const std::string& email)
     if (email.length() - dotPos - 1 < 2)
         return false;
 
+    return true;
+}
+
+bool redirectHomeOnExistingSession(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &callback)
+{
+    if(!req->session()->find(USER_KEY))
+    {
+        return false;
+    }
+
+    HttpResponsePtr resp = HttpResponse::newHttpResponse();
+    resp->setStatusCode(drogon::k301MovedPermanently);
+    resp->addHeader("Location", "/home");
+    callback(resp);
     return true;
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <drogon/drogon.h>
+constexpr const char* USER_KEY = "user_state";
 
 bool validateCredentials(
     const std::string& username, 
@@ -20,3 +22,7 @@ inline bool isEmail(const std::string& str)
     }
     return false;
 }
+
+bool redirectHomeOnExistingSession(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &callback);
