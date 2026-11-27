@@ -1,29 +1,56 @@
 
-const homeButton = document.querySelector("#button-home button");
-const exploreButton = document.querySelector("#button-explore button");
-const notificationsButton = document.querySelector("#button-notifications button");
-const messagesButton = document.querySelector("#button-messages button");
-const bookmarksButton = document.querySelector("#button-bookmarks button");
-const profileButton = document.querySelector("#button-profile button");
-const postButton = document.querySelector("#button-post button");
-const forYouButton = document.querySelector("#button-for-you button");
-const followingButton = document.querySelector("#button-following button");
-const sidebarProfile = document.querySelector(".sidebar-profile");
+// ==========================================
+// 2. EVENT LISTENER INITIALIZATION
+// ==========================================
 
-homeButton.addEventListener("click", homeHandler);
-exploreButton.addEventListener("click", exploreHandler);
-notificationsButton.addEventListener("click", notificationsHandler);
-messagesButton.addEventListener("click", messagesHandler);
-bookmarksButton.addEventListener("click", bookmarksHandler);
-profileButton.addEventListener("click", profileHandler);
-postButton.addEventListener("click", postHandler);
-forYouButton.addEventListener("click", forYouHandler);
-followingButton.addEventListener("click", followingHandler);
-sidebarProfile.addEventListener("click", sidebarProfileHandler)
+function initializeListeners() {
+
+    // Prevent duplicate initialization
+    if (window.listenersInitialized) return;
+
+    const homeButton = document.querySelector("#button-home button");
+    const exploreButton = document.querySelector("#button-explore button");
+    const notificationsButton = document.querySelector("#button-notifications button");
+    const messagesButton = document.querySelector("#button-messages button");
+    const bookmarksButton = document.querySelector("#button-bookmarks button");
+    const profileButton = document.querySelector("#button-profile button");
+    const postButton = document.querySelector("#button-post button");
+    const forYouButton = document.querySelector("#button-for-you button");
+    const followingButton = document.querySelector("#button-following button");
+    const sidebarProfile = document.querySelector(".sidebar-profile");
+
+    homeButton?.addEventListener("click", homeHandler);
+    exploreButton?.addEventListener("click", exploreHandler);
+    notificationsButton?.addEventListener("click", notificationsHandler);
+    messagesButton?.addEventListener("click", messagesHandler);
+    bookmarksButton?.addEventListener("click", bookmarksHandler);
+    profileButton?.addEventListener("click", profileHandler);
+    postButton?.addEventListener("click", postHandler);
+    forYouButton?.addEventListener("click", forYouHandler);
+    followingButton?.addEventListener("click", followingHandler);
+    sidebarProfile?.addEventListener("click", sidebarProfileHandler);
+
+    window.listenersInitialized = true;
+}
+
+
 
 async function homeHandler() 
 {
-    alert("homeHandler");
+      
+    const response = await fetch(window.location.origin + "/home");
+    if (!response.ok)
+    {
+        throw new Error(`HTTP error: ${response.status}`);
+    }
+    body = await response.text();
+
+    // Wait until the entire HTML is downloaded
+    //document.open();
+    //document.write(body);
+    //document.close();
+    document.body.innerHTM = body;
+    window.history.pushState({}, '', window.location.origin + "/home");
 }
 
 async function exploreHandler() 
@@ -78,3 +105,5 @@ async function sidebarProfileHandler()
 {
     alert("sidebarProfileHandler");
 }
+
+initializeListeners();

@@ -10,56 +10,56 @@ loginDuringCreate.addEventListener("click", loginButtonDuringAccountCreate);
 
 async function handleSignIn(event) 
 {
-    url = window.location.origin + "/api/login";
+    const url = window.location.origin + "/api/login";
+
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
     try 
     {
-        const response = await fetch(url, {
+        var response = await fetch(url, 
+        {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                username,
-                password
-        })
+            body: JSON.stringify({ username, password },),
+            credentials: 'include',
+            cache: "no-store"
         });
-        var body = await response.text();
-        if(response.status == 302 || response.status == 301 || response.status == 200)
-        {
-            if(response.status != 200)
-            {
-                const response = await fetch(window.location.origin + "/home");
-                if (!response.ok)
-                {
-                    throw new Error(`HTTP error: ${response.status}`);
-                }
-                body = await response.text();
-            }
 
-            // Wait until the entire HTML is downloaded
+        if(response.status == 302)
+        {
+            response = await fetch(window.location.origin + "/home", { cache: "no-store"});
+        }
+
+        const body = await response.text();
+
+        if (response.ok && response.url.endsWith("/home")) 
+        {
             document.open();
             document.write(body);
             document.close();
-            window.history.pushState({}, '', window.location.origin + "/home");
+
+            window.history.pushState({}, "", "/home");
         }
-        else if (response.status === 404 && body == "login") 
+        else if (response.status === 404 && body === "login") 
         {
             document.getElementById("username").value = "";
             document.getElementById("password").value = "";
-            document.getElementById("username").placeholder  = "Username or email not found";
+            document.getElementById("username").placeholder =
+                "Username or email not found";
             document.getElementById("username").style.borderColor = "red";
-            throw new Error(`Response status: ${response.status}`);
         }
-    } 
+        else 
+        {
+            console.error("Login failed:", response.status, body);
+        }
+    }
     catch (error) 
     {
-        console.error(error.message);
+        console.error(error);
     }
-
-
 }
 
 async function handleRegister(event) 

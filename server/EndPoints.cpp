@@ -148,7 +148,7 @@ void EndPoints::login(
         callback(resp);
         return;
     }
-
+    
     uint64_t userId = queryResult[0]["id"].as<uint64_t>();
     req->session()->insert(USER_KEY, createUserState(userId));
     

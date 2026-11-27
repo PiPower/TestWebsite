@@ -94,7 +94,7 @@ bool redirectHomeOnExistingSession(
     }
 
     HttpResponsePtr resp = HttpResponse::newHttpResponse();
-    resp->setStatusCode(drogon::k301MovedPermanently);
+    resp->setStatusCode(drogon::k302Found);
     resp->addHeader("Location", "/home");
     callback(resp);
     return true;
